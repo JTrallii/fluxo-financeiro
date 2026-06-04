@@ -1,5 +1,6 @@
 package Faculdade.projeto.Fluxo.Financeiro.entity;
 
+import Faculdade.projeto.Fluxo.Financeiro.dto.DadosCadastroTransacao;
 import Faculdade.projeto.Fluxo.Financeiro.enums.StatusTransacao;
 import Faculdade.projeto.Fluxo.Financeiro.enums.TipoTransacao;
 import jakarta.persistence.*;
@@ -37,6 +38,17 @@ public class Transacao {
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
 
+    @PrePersist
+    public void prePersist() {
+        this.createdAt = LocalDateTime.now();
+        this.updatedAt = LocalDateTime.now();
+    }
+
+    @PreUpdate
+    public void preUpdate() {
+        this.updatedAt = LocalDateTime.now();
+    }
+
     public Transacao() {}
 
     public Transacao(UUID id, UUID usuarioId, UUID categoriaId, TipoTransacao tipo, String descricao, BigDecimal valor, LocalDate dataTransacao, StatusTransacao status, String observacao) {
@@ -50,6 +62,19 @@ public class Transacao {
         this.status = status;
         this.observacao = observacao;
     }
+
+    public Transacao(DadosCadastroTransacao dados) {
+        this.usuarioId = dados.usuarioId();
+        this.categoriaId = dados.categoriaId();
+        this.tipo = dados.tipo();
+        this.descricao = dados.descricao();
+        this.valor = dados.valor();
+        this.dataTransacao = dados.dataTransacao();
+        this.status = dados.status();
+        this.observacao = dados.observacao();
+    }
+
+
 
     public UUID getId() {
         return id;
