@@ -1,8 +1,10 @@
 package Faculdade.projeto.Fluxo.Financeiro.entity;
 
 
+import Faculdade.projeto.Fluxo.Financeiro.dto.DadosAtualizarUsuario;
 import Faculdade.projeto.Fluxo.Financeiro.dto.DadosCadastroUsuario;
 import jakarta.persistence.*;
+import jakarta.validation.Valid;
 import lombok.*;
 
 import java.time.LocalDate;
@@ -30,6 +32,9 @@ public class Usuario {
     private LocalDate dataNascimento;
     private String profissao;
 
+    @Column(nullable = false)
+    private Boolean ativo = true;
+
     @OneToMany(mappedBy = "usuario")
     private List<Categoria> categorias;
 
@@ -54,12 +59,35 @@ public class Usuario {
     }
 
     public Usuario(DadosCadastroUsuario dados) {
+        this.ativo = true;
         this.nomeCompleto = dados.nomeCompleto();
         this.email = dados.email();
         this.telefone = dados.telefone();
         this.cpf = dados.cpf();
         this.dataNascimento = dados.dataNascimento();
         this.profissao = dados.profissao();
+    }
+
+    public void atualizarInformacoes(@Valid DadosAtualizarUsuario dados) {
+        if (dados.nomeCompleto() != null) {
+            this.nomeCompleto = dados.nomeCompleto();
+        }
+
+        if (dados.telefone() != null) {
+            this.telefone = dados.telefone();
+        }
+
+        if (dados.profissao() != null) {
+            this.profissao = dados.profissao();
+        }
+
+        if (dados.endereco() != null) {
+            this.endereco.atualizarInformacoes(dados.endereco());
+        }
+    }
+
+    public void deletarUsuario() {
+        this.ativo = false;
     }
 }
 

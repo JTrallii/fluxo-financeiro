@@ -4,6 +4,7 @@ package Faculdade.projeto.Fluxo.Financeiro.controller;
 import Faculdade.projeto.Fluxo.Financeiro.dto.DadosCadastroTransacao;
 import Faculdade.projeto.Fluxo.Financeiro.entity.Transacao;
 import Faculdade.projeto.Fluxo.Financeiro.repository.TransacaoRepository;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -18,7 +19,7 @@ public class TransacaoController {
     private TransacaoRepository transacaoRepository;
 
     @PostMapping
-    public void cadastrar(@RequestBody DadosCadastroTransacao dados) {
+    public void cadastrar(@RequestBody @Valid DadosCadastroTransacao dados) {
         transacaoRepository.save(new Transacao(dados));
     }
 

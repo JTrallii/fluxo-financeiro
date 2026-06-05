@@ -1,7 +1,9 @@
 package Faculdade.projeto.Fluxo.Financeiro.entity;
 
 
+import Faculdade.projeto.Fluxo.Financeiro.dto.DadosCadastroEndereco;
 import jakarta.persistence.*;
+import jakarta.validation.Valid;
 import lombok.*;
 
 import java.time.LocalDateTime;
@@ -36,6 +38,17 @@ public class Endereco {
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
 
+    public Endereco(DadosCadastroEndereco dados, Usuario usuario) {
+        this.usuario = usuario;
+        this.logradouro = dados.logradouro();
+        this.numero = dados.numero();
+        this.complemento = dados.complemento();
+        this.cep = dados.cep();
+        this.cidade = dados.cidade();
+        this.estado = dados.estado();
+    }
+
+
     @PrePersist
     public void prePersist() {
         this.createdAt = LocalDateTime.now();
@@ -47,4 +60,56 @@ public class Endereco {
         this.updatedAt = LocalDateTime.now();
     }
 
+    public void atualizarInformacoes(@Valid DadosCadastroEndereco dados) {
+        if (dados.logradouro() != null) {
+            this.logradouro = dados.logradouro();
+        }
+
+        if (dados.numero() != null) {
+            this.numero = dados.numero();
+        }
+
+        if (dados.complemento() != null) {
+            this.complemento = dados.complemento();
+        }
+
+        if (dados.cep() != null) {
+            this.cep = dados.cep();
+        }
+
+        if (dados.cidade() != null) {
+            this.cidade = dados.cidade();
+        }
+
+        if (dados.estado() != null) {
+            this.estado = dados.estado();
+        }
+
+
+    }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
