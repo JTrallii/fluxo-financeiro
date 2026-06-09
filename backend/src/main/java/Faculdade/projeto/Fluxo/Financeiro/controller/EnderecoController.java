@@ -2,34 +2,34 @@ package Faculdade.projeto.Fluxo.Financeiro.controller;
 
 
 import Faculdade.projeto.Fluxo.Financeiro.dto.DadosCadastroEndereco;
-import Faculdade.projeto.Fluxo.Financeiro.entity.Endereco;
-import Faculdade.projeto.Fluxo.Financeiro.entity.Usuario;
-import Faculdade.projeto.Fluxo.Financeiro.repository.EnderecoRepository;
-import Faculdade.projeto.Fluxo.Financeiro.repository.UsuarioRepository;
+import Faculdade.projeto.Fluxo.Financeiro.dto.DadosListagemEndereco;
+import Faculdade.projeto.Fluxo.Financeiro.service.EnderecoService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.UUID;
 
 @RestController
-@RequestMapping("endereco")
+@RequestMapping("/usuarios/{usuarioId}/endereco")
 public class EnderecoController {
 
     @Autowired
-    private EnderecoRepository enderecoRepository;
+    private EnderecoService enderecoService;
 
-    @Autowired
-    private UsuarioRepository usuarioRepository;
+    @PostMapping
+    public void cadastrar(@PathVariable UUID usuarioId, @RequestBody @Valid DadosCadastroEndereco dados) {
+        enderecoService.cadastrar(usuarioId, dados);
+    }
 
-    @PostMapping("/usuarios/{usuarioId}/endereco")
-    public void cadastrar(
-            @PathVariable UUID usuarioId,
-            @RequestBody DadosCadastroEndereco dados
-    ) {
-        Usuario usuario = usuarioRepository.findById(usuarioId)
-                .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
+    @GetMapping
+    public DadosListagemEndereco listarEndereco(@PathVariable UUID usuarioId) {
+        return enderecoService.listarEndereco(usuarioId);
+    }
 
-        enderecoRepository.save(new Endereco(dados, usuario));
+    @PutMapping
+    public void atualizarEndereco(@PathVariable UUID usuarioId, @RequestBody @Valid DadosCadastroEndereco dados) {
+        enderecoService.atualizarEndereco(usuarioId, dados);
     }
 
 }
