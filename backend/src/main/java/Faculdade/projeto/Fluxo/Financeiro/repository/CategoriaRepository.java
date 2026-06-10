@@ -16,4 +16,5 @@ public interface CategoriaRepository extends JpaRepository<Categoria, UUID> {
     Page<Categoria> findAllByUsuario_IdAndAtivoFalse(UUID usuarioId, Pageable paginacao);
 
     Optional<Categoria> findByIdAndUsuario_Id(UUID categoriaId, UUID usuarioId);
+
 }
